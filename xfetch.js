@@ -32,7 +32,7 @@
 			}
 			const p = fetch(input, init).then(r => {
 				if (r.ok) return r
-				throw new Error(r)
+				throw new Error(r.status)
 			})
 			for (const alias of ALIASES) {
 				p[alias] = () => p.then(r => r[alias]())
