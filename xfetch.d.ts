@@ -5,7 +5,7 @@ interface XPromise<T> extends Promise<T> {
 	json(): Promise<any>
 	text(): Promise<string>
 }
-interface XRequestInit extends RequestInit{
+interface XRequestInit extends RequestInit {
 	json?: any
 	form?: object
 	qs?: object
@@ -19,5 +19,7 @@ interface XFetch extends GlobalFetch {
 	patch: fetch
 	delete: fetch
 	head: fetch
+	createXFetch(fetch: GlobalFetch): XFetch
 }
 declare const xfetch: XFetch
+export = xfetch

@@ -1,5 +1,3 @@
-/// <reference path="../xfetch.d.ts"/>
-
 import test from 'ava'
 import xfetch from '../xfetch'
 import fetch from 'node-fetch'
