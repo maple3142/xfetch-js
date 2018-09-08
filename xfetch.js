@@ -30,6 +30,9 @@
 				u.search = new URLSearchParams(init.qs).toString()
 				input = u.href
 			}
+			if (!init.credentials) {
+				init.credentials = 'same-origin'
+			}
 			const p = fetch(input, init).then(r => {
 				if (r.ok) return r
 				throw new Error(r.status)
