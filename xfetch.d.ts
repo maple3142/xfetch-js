@@ -19,7 +19,7 @@ interface XFetch extends GlobalFetch {
 	patch: fetch
 	delete: fetch
 	head: fetch
-	createXFetch(fetch: GlobalFetch): XFetch
+	create(fetch: GlobalFetch): XFetch
 }
 declare const xfetch: XFetch
 export = xfetch

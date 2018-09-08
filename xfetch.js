@@ -13,7 +13,7 @@
 })(this, () => {
 	const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head']
 	const ALIASES = ['arrayBuffer', 'blob', 'formData', 'json', 'text']
-	const createXFetch = fetch => {
+	const create = fetch => {
 		const xfetch = (input, init = {}) => {
 			if (!init.headers) {
 				init.headers = {}
@@ -47,7 +47,7 @@
 		}
 		return xfetch
 	}
-	const xfetch = createXFetch(typeof fetch === 'undefined' ? null : fetch)
-	xfetch.createXFetch = createXFetch
+	const xfetch = create(typeof fetch === 'undefined' ? null : fetch)
+	xfetch.create = create
 	return xfetch
 })
