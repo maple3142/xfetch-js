@@ -5,9 +5,7 @@
 > Which aims to be as small as possible and easy to use.
 
 [![Build Status](https://img.shields.io/travis/maple3142/xfetch-js.svg?style=flat-square)](https://travis-ci.org/maple3142/xfetch-js)
-![npm](https://img.shields.io/npm/v/xfetch-js.svg?style=flat-square)
-![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/xfetch-js.svg?style=flat-square)
-![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/xfetch-js.svg?style=flat-square)
+[![npm](https://img.shields.io/npm/v/xfetch-js.svg?style=flat-square)](https://www.npmjs.com/package/xfetch-js)
 
 ## Examaple
 
