@@ -2,7 +2,7 @@ import test from 'ava'
 import xfetch from '../xfetch'
 import fetch from 'node-fetch'
 
-const xf = xfetch.createXFetch(fetch)
+const xf = xfetch.create(fetch)
 
 test('get', async t => {
 	const { headers } = await xf('https://postman-echo.com/get/').json()
