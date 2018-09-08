@@ -8,7 +8,7 @@
 	} else if (typeof exports === 'object') {
 		module.exports = fn()
 	} else {
-		root.xfetch = fn()
+		root.xf = fn()
 	}
 })(this, () => {
 	const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head']

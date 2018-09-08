@@ -10,8 +10,6 @@
 ## Examaple
 
 ```js
-// in browser, window.xfetch is the default exports
-
 // get with query string
 xf('https://postman-echo.com/get/', { qs: { foo: 'bar' } })
   .json()
