@@ -5,6 +5,8 @@
 ## Examaple
 
 ```js
+// in browser, window.xfetch is the default exports
+
 // get with query string
 xf('https://postman-echo.com/get/', { qs: { foo: 'bar' } })
   .json()
@@ -24,7 +26,7 @@ xf.post('https://postman-echo.com/post', { json: { foo: 'bar' } })
 ## With node
 
 ```js
-const xf = require('xfetch-js').createXFetch(require('node-fetch'))
+const xf = require('xfetch-js').create(require('node-fetch'))
 
 xf('https://postman-echo.com/get/', { qs: { foo: 'bar' } })
   .json()
