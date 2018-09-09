@@ -1,6 +1,6 @@
 {
 	"name": "xfetch-js",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "",
 	"main": "xfetch.js",
 	"browser": "xfetch.min.js",
