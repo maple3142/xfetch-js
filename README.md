@@ -1,4 +1,4 @@
-# XFetch.js
+# xfetch-js
 
 > A extremely simple fetch extension for modern browsers inspired by [sindresorhus/ky](https://github.com/sindresorhus/ky).
 >
