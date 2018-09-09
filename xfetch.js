@@ -11,14 +11,22 @@
 		root.xf = fn()
 	}
 })(this, () => {
+	class HTTPError extends Error {
+		constructor(res) {
+			super(res.statusText)
+			this.response = res
+		}
+	}
 	const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head']
 	const ALIASES = ['arrayBuffer', 'blob', 'formData', 'json', 'text']
-	const genqs=o=>new URLSearchParams(o).toString()
-	const create = fetch => {
+	const genqs = o => new URLSearchParams(o).toString()
+	const create = (fetch, baseURI = typeof document !== 'undefined' ? document.baseURI : undefined) => {
 		const xfetch = (input, init = {}) => {
+			const url = new URL(input, baseURI)
 			if (!init.headers) {
 				init.headers = {}
 			}
+			// Add json or form on body
 			if (init.json) {
 				init.body = JSON.stringify(init.json)
 				init.headers['Content-Type'] = 'application/json'
@@ -26,20 +34,23 @@
 				init.body = genqs(init.form)
 				init.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 			}
+			// Querystring
 			if (init.qs) {
-				input += '?' + genqs(init.qs)
+				url.search = genqs(init.qs)
 			}
+			// same-origin by default
 			if (!init.credentials) {
 				init.credentials = 'same-origin'
 			}
-			const p = fetch(input, init).then(r => {
-				if (r.ok) return r
-				throw new Error(r.status)
+			const promise = fetch(url, init).then(res => {
+				if (!res.ok) throw new HTTPError(res)
+				return res
 			})
 			for (const alias of ALIASES) {
-				p[alias] = () => p.then(r => r[alias]())
+				// if transformation function is provided, pass it for transform
+				promise[alias] = fn => promise.then(res => res[alias]()).then(fn || (x => x))
 			}
-			return p
+			return promise
 		}
 		for (const method of METHODS) {
 			xfetch[method] = (input, init = {}) => {
@@ -47,9 +58,12 @@
 				return xfetch(input, init)
 			}
 		}
+		// Extra methods and classes
+		xfetch.create = create
+		xfetch.base = baseURI => create(fetch, baseURI)
+		xfetch.HTTPError = HTTPError
 		return xfetch
 	}
 	const xfetch = create(typeof fetch === 'undefined' ? null : fetch)
-	xfetch.create = create
 	return xfetch
 })

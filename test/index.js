@@ -20,3 +20,17 @@ test('post form', async t => {
 	const { form } = await xf.post('https://postman-echo.com/post', { form: { foo: 'bar' } }).json()
 	t.deepEqual(form, { foo: 'bar' })
 })
+test('base', async t => {
+	const xf2 = xf.base('https://postman-echo.com/')
+	const { headers } = await xf2.get('/get').json()
+	t.is(headers.host, 'postman-echo.com')
+})
+test('transform', async t => {
+	const headers = await xf.get('https://postman-echo.com/get/').json(r => r.headers)
+	t.is(headers.host, 'postman-echo.com')
+})
+test('HTTPError', async t => {
+	await t.throwsAsync(xf.get('http://postman-echo.com/404'), {
+		instanceOf: xf.HTTPError
+	})
+})
