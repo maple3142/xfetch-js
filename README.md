@@ -20,10 +20,22 @@ xf.post('https://postman-echo.com/post', { form: { foo: 'bar' } })
   .json()
   .then(console.log)
 
-// post json
+// post json with transforms
 xf.post('https://postman-echo.com/post', { json: { foo: 'bar' } })
-  .json()
+  .json(r => r.data)
   .then(console.log)
+
+// custom base, default base in browser is document.baseURI
+const xf2 = xf.base('https://postman-echo.com/')
+xf2.get('/get')
+  .then(console.log)
+
+// HTTPError
+xf.get('https://postman-echo.com/404')
+  .catch(e => {
+    assert(e instanceof xf.HTTPError)
+    console.log(e.response)
+  })
 ```
 
 ## With node

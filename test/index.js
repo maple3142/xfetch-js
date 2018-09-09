@@ -22,10 +22,10 @@ test('post form', async t => {
 })
 test('base', async t => {
 	const xf2 = xf.base('https://postman-echo.com/')
-	const { headers } = await xf2.get('/get').json()
-	t.is(headers.host, 'postman-echo.com')
+	const { url } = await xf2.get('/get').json()
+	t.is(url, 'https://postman-echo.com/get')
 })
-test('transform', async t => {
+test('transforms', async t => {
 	const headers = await xf.get('https://postman-echo.com/get/').json(r => r.headers)
 	t.is(headers.host, 'postman-echo.com')
 })
