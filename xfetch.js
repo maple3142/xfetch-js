@@ -13,6 +13,7 @@
 })(this, () => {
 	const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head']
 	const ALIASES = ['arrayBuffer', 'blob', 'formData', 'json', 'text']
+	const genqs=o=>new URLSearchParams(o).toString()
 	const create = fetch => {
 		const xfetch = (input, init = {}) => {
 			if (!init.headers) {
@@ -22,13 +23,11 @@
 				init.body = JSON.stringify(init.json)
 				init.headers['Content-Type'] = 'application/json'
 			} else if (init.form) {
-				init.body = new URLSearchParams(init.form).toString()
+				init.body = genqs(init.form)
 				init.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 			}
 			if (init.qs) {
-				const u = new URL(input)
-				u.search = new URLSearchParams(init.qs).toString()
-				input = u.href
+				input += '?' + genqs(init.qs)
 			}
 			if (!init.credentials) {
 				init.credentials = 'same-origin'
