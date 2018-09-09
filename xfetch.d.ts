@@ -10,8 +10,9 @@ interface XRequestInit extends RequestInit {
 	form?: object
 	qs?: object
 }
+type originalfetch = GlobalFetch['fetch']
 type fetch = (input: string, init?: XRequestInit) => XPromise<Response>
-interface XFetch extends GlobalFetch {
+interface XFetch {
 	(input: string, init?: XRequestInit): XPromise<Response>
 	get: fetch
 	post: fetch
@@ -19,7 +20,7 @@ interface XFetch extends GlobalFetch {
 	patch: fetch
 	delete: fetch
 	head: fetch
-	create(fetch: GlobalFetch): XFetch
+	create(fetch: originalfetch): XFetch
 }
 declare const xfetch: XFetch
 export = xfetch
