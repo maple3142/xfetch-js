@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>GitHub avatar fetcher</title>
+	<script src="../../xfetch.min.js"></script>
+</head>
+
+<body>
+	<div>
+		<form id="form">
+			<span>Enter your GitHub user name here:</span>
+			<label for="name"></label>
+			<input type="text" id="name">
+			<input type="submit" value="fetch">
+		</form>
+		<div style="padding-top: .3em;">
+			<img id="avatar">
+		</div>
+	</div>
+	<script>
+		const $ = s => document.querySelector(s)
+		const gh = xf.extend({
+			baseURI: 'https://api.github.com/'
+		})
+		$('#form').addEventListener('submit', e => {
+			e.preventDefault()
+			const id = encodeURIComponent($('#name').value)
+			// fetch user's avatar and fetch its content as a blob
+			gh.get(`/users/${id}`).json(r => xf.get(r.avatar_url).blob(URL.createObjectURL)).then(url => {
+				$('#avatar').src = url
+			}).catch(e=>{
+				console.error(e.response)
+				alert('Fetch error, see console for detailed informations.')
+			})
+		})
+	</script>
+</body>
+
+</html>
