@@ -6,6 +6,7 @@
 
 [![Build Status](https://img.shields.io/travis/maple3142/xfetch-js.svg?style=flat-square)](https://travis-ci.org/maple3142/xfetch-js)
 [![npm](https://img.shields.io/npm/v/xfetch-js.svg?style=flat-square)](https://www.npmjs.com/package/xfetch-js)
+[![Type definition](https://img.shields.io/npm/types/xfetch-js.svg?style=flat-square)](https://github.com/maple3142/xfetch-js/blob/master/xfetch.base.d.ts)
 
 ## Examaple
 
@@ -29,15 +30,13 @@ xf.post('https://postman-echo.com/post', { json: { foo: 'bar' } })
 const xf2 = xf.extend({
   baseURI: 'https://postman-echo.com/'
 })
-xf2.get('/get')
-  .then(console.log)
+xf2.get('/get').then(console.log)
 
 // HTTPError
-xf.get('https://postman-echo.com/404')
-  .catch(e => {
-    assert(e instanceof xf.HTTPError)
-    console.log(e.response)
-  })
+xf.get('https://postman-echo.com/404').catch(e => {
+  assert(e instanceof xf.HTTPError)
+  console.log(e.response)
+})
 ```
 
 ## With node
@@ -58,7 +57,13 @@ Of course, you can polyfill them by youself to use this module.
 
 ## Main differences bewteen fetch and xfetch-js
 
-* `credentials` is set to `same-origin` by default.
-* throws error when `response.ok` is not true
-* Some useful methods to call, such as `get`,`post` and so on...
-* Support some simple serialization, including `json`,`urlencoded` and `querystring`
+- `credentials` is set to `same-origin` by default.
+- Throws error when `response.ok` is not true
+- Some useful methods to call, such as `get`,`post` and so on...
+- Support some simple serialization, including `json`,`urlencoded` and `querystring`
+- Support post transformation like `.json(r => r.body)`
+- Create another instance with default options `xf.extend({})`
+
+## API
+
+See [xfetch.base.d.ts](https://github.com/maple3142/xfetch-js/blob/master/xfetch.base.d.ts).
