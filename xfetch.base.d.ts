@@ -16,6 +16,7 @@ export interface XRequestInit extends RequestInit {
 	qs?: object | string
 	json?: any
 	form?: object
+	baseURI?: string
 }
 export declare class HTTPError extends Error {
 	response: Response
@@ -30,6 +31,6 @@ export interface XFetch {
 	delete(input: string, init?: XRequestInit): XResponsePromise
 	head(input: string, init?: XRequestInit): XResponsePromise
 	create(fetch: originalfetch, baseURI?: string): XFetch
-	base(baseURI: string): XFetch
+	extend(defaultInit: XRequestInit): XFetch
 	HTTPError: HTTPError
 }

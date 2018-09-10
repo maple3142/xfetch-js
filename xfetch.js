@@ -20,9 +20,10 @@
 	const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head']
 	const ALIASES = ['arrayBuffer', 'blob', 'formData', 'json', 'text']
 	const genqs = o => new URLSearchParams(o).toString()
-	const create = (fetch, baseURI = typeof document !== 'undefined' ? document.baseURI : undefined) => {
+	const create = (fetch, defaultInit = {}) => {
 		const xfetch = (input, init = {}) => {
-			const url = new URL(input, baseURI)
+			Object.assign(init, defaultInit)
+			const url = new URL(input, init.baseURI || undefined)
 			if (!init.headers) {
 				init.headers = {}
 			}
@@ -60,10 +61,12 @@
 		}
 		// Extra methods and classes
 		xfetch.create = create
-		xfetch.base = baseURI => create(fetch, baseURI)
+		xfetch.extend = defaultInit => create(fetch, defaultInit)
 		xfetch.HTTPError = HTTPError
 		return xfetch
 	}
-	const xfetch = create(typeof fetch === 'undefined' ? null : fetch)
+	const xfetch = create(typeof fetch === 'undefined' ? null : fetch, {
+		baseURI: typeof document === 'undefined' ? undefined : document.baseURI
+	})
 	return xfetch
 })
