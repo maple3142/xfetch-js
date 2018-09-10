@@ -12,6 +12,10 @@ test('get with qs', async t => {
 	const { args } = await xf.get('https://postman-echo.com/get', { qs: { foo: 'bar' } }).json()
 	t.deepEqual(args, { foo: 'bar' })
 })
+test('get with string qs', async t => {
+	const { args } = await xf.get('https://postman-echo.com/get', { qs: 'foo=bar' }).json()
+	t.deepEqual(args, { foo: 'bar' })
+})
 test('post json', async t => {
 	const { data } = await xf.post('https://postman-echo.com/post', { json: { foo: 'bar' } }).json()
 	t.deepEqual(data, { foo: 'bar' })
