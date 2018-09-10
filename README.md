@@ -25,8 +25,10 @@ xf.post('https://postman-echo.com/post', { json: { foo: 'bar' } })
   .json(r => r.data)
   .then(console.log)
 
-// custom base, default base in browser is document.baseURI
-const xf2 = xf.base('https://postman-echo.com/')
+// extend, default baseURI in browser is document.baseURI
+const xf2 = xf.extend({
+  baseURI: 'https://postman-echo.com/'
+})
 xf2.get('/get')
   .then(console.log)
 
@@ -54,7 +56,7 @@ Otherwise, you will get an error about `global.URL`,`global.URLSearchParams` is 
 
 Of course, you can polyfill them by youself to use this module.
 
-## Main differences bewteen fetch and XFetch.js
+## Main differences bewteen fetch and xfetch-js
 
 * `credentials` is set to `same-origin` by default.
 * throws error when `response.ok` is not true
