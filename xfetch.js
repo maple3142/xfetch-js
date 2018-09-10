@@ -13,8 +13,8 @@
 })(this, () => {
 	class HTTPError extends Error {
 		constructor(res) {
-			this.name = 'HTTPError'
 			super(res.statusText)
+			this.name = 'HTTPError'
 			this.response = res
 		}
 	}
