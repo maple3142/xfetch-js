@@ -5,14 +5,18 @@
 	"main": "xfetch.js",
 	"browser": "xfetch.min.js",
 	"scripts": {
-		"test": "ava",
+		"test": "npm run test:js && npm run test:typing",
+		"test:js": "ava",
+		"test:typing": "tsc --strict --outDir .trash test/typing.ts",
 		"min": "minify xfetch.js -o xfetch.min.js",
 		"prepare": "npm run test && npm run min"
 	},
 	"devDependencies": {
 		"ava": "^1.0.0-beta.8",
 		"babel-minify": "^0.4.3",
-		"node-fetch": "^2.2.0"
+		"node-fetch": "^2.2.0",
+		"tsc": "^1.20150623.0",
+		"typescript": "^3.0.3"
 	},
 	"keywords": [],
 	"author": "maple3142",
