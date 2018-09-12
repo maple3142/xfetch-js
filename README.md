@@ -7,7 +7,6 @@
 [![Build Status](https://img.shields.io/travis/maple3142/xfetch-js.svg?style=flat-square)](https://travis-ci.org/maple3142/xfetch-js)
 [![npm](https://img.shields.io/npm/v/xfetch-js.svg?style=flat-square)](https://www.npmjs.com/package/xfetch-js)
 [![Type definition](https://img.shields.io/npm/types/xfetch-js.svg?style=flat-square)](https://github.com/maple3142/xfetch-js/blob/master/xfetch.base.d.ts)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmaple3142%2Fxfetch-js.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmaple3142%2Fxfetch-js?ref=badge_shield)
 
 ## Examaple
 
@@ -68,7 +67,6 @@ Of course, you can polyfill them by youself to use this module.
 ## API
 
 See [xfetch.base.d.ts](https://github.com/maple3142/xfetch-js/blob/master/xfetch.base.d.ts).
-
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmaple3142%2Fxfetch-js.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmaple3142%2Fxfetch-js?ref=badge_large)
