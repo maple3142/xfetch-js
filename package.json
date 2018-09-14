@@ -1,8 +1,8 @@
 {
 	"name": "xfetch-js",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"description": "",
-	"main": "xfetch.js",
+	"main": "node.js",
 	"browser": "xfetch.min.js",
 	"scripts": {
 		"test": "npm run test:js && npm run test:typing",

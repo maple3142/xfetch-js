@@ -42,8 +42,9 @@ xf.get('https://postman-echo.com/404').catch(e => {
 ## With node
 
 ```js
-const xf = require('xfetch-js/node')
+const xf = require('xfetch-js')
 // This one will pollute global.URL and global.URLSearchParams, then return a xfetch client with node-fetch
+// If you want a pure xfetch instance, use require('xfetch-js/xfetch')
 
 xf('https://postman-echo.com/get/', { qs: { foo: 'bar' } })
   .json()
