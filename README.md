@@ -42,18 +42,13 @@ xf.get('https://postman-echo.com/404').catch(e => {
 ## With node
 
 ```js
-const xf = require('xfetch-js').create(require('node-fetch'))
+const xf = require('xfetch-js/node')
+// This one will pollute global.URL and global.URLSearchParams, then return a xfetch client with node-fetch
 
 xf('https://postman-echo.com/get/', { qs: { foo: 'bar' } })
   .json()
   .then(console.log)
 ```
-
-### Node version must be greater than 10
-
-Otherwise, you will get an error about `global.URL`,`global.URLSearchParams` is undefined.
-
-Of course, you can polyfill them by youself to use this module.
 
 ## Main differences bewteen fetch and xfetch-js
 

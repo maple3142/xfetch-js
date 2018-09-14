@@ -1,5 +1,5 @@
 import test from 'ava'
-import xfetch from '../xfetch'
+import xfetch from '../node'
 import fetch from 'node-fetch'
 
 const xf = xfetch.create(fetch)
