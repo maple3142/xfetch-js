@@ -24,6 +24,10 @@ test('post form', async t => {
 	const { form } = await xf.post('https://postman-echo.com/post', { form: { foo: 'bar' } }).json()
 	t.deepEqual(form, { foo: 'bar' })
 })
+test('merge qs', async t => {
+	const { args } = await xf.get('https://postman-echo.com/get?a=b', { qs: { foo: 'bar' } }).json()
+	t.deepEqual(args, { foo: 'bar', a: 'b' })
+})
 test('extend', async t => {
 	const xf2 = xf.extend({
 		baseURI: 'https://postman-echo.com/'

@@ -20,7 +20,9 @@
 	}
 	const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head']
 	const ALIASES = ['arrayBuffer', 'blob', 'formData', 'json', 'text']
-	const genqs = o => new URLSearchParams(o).toString()
+	const searchParamsToObject = sp => [...sp.entries()].reduce((o, [k, v]) => ((o[k] = v), o), {})
+	const createQueryString = o => new URLSearchParams(o).toString()
+	const parseQueryString = s => searchParamsToObject(new URLSearchParams(s))
 	const create = (fetch, defaultInit = {}) => {
 		const xfetch = (input, init = {}) => {
 			Object.assign(init, defaultInit)
@@ -33,12 +35,13 @@
 				init.body = JSON.stringify(init.json)
 				init.headers['Content-Type'] = 'application/json'
 			} else if (init.form) {
-				init.body = genqs(init.form)
+				init.body = createQueryString(init.form)
 				init.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 			}
 			// Querystring
 			if (init.qs) {
-				url.search = genqs(init.qs)
+				if (typeof init.qs === 'string') init.qs = parseQueryString(init.qs)
+				url.search = createQueryString(Object.assign(searchParamsToObject(url.searchParams), init.qs))
 			}
 			// same-origin by default
 			if (!init.credentials) {
