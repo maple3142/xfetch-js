@@ -12,16 +12,20 @@ export interface XResponsePromise extends Promise<Response> {
 	json<K>(cb: fn<any, K>): Promise<K>
 	text<K>(cb: fn<string, K>): Promise<K>
 }
+type originalfetch = GlobalFetch['fetch']
 export interface XRequestInit extends RequestInit {
 	qs?: object | string
 	json?: any
 	form?: object
 	baseURI?: string
+	fetch?: originalfetch
+	// URL & Request should be constructor
+	URL?: new (...args: any[]) => URL
+	Request?: new (...args: any[]) => Request
 }
 export declare class HTTPError extends Error {
 	response: Response
 }
-type originalfetch = GlobalFetch['fetch']
 export interface XFetch {
 	(input: string, init?: XRequestInit): XResponsePromise
 	get(input: string, init?: XRequestInit): XResponsePromise
@@ -30,7 +34,6 @@ export interface XFetch {
 	patch(input: string, init?: XRequestInit): XResponsePromise
 	delete(input: string, init?: XRequestInit): XResponsePromise
 	head(input: string, init?: XRequestInit): XResponsePromise
-	create(fetch: originalfetch, baseURI?: string): XFetch
 	extend(defaultInit: XRequestInit): XFetch
 	HTTPError: HTTPError
 }

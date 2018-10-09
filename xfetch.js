@@ -23,10 +23,10 @@
 	const searchParamsToObject = sp => [...sp.entries()].reduce((o, [k, v]) => ((o[k] = v), o), {})
 	const createQueryString = o => new URLSearchParams(o).toString()
 	const parseQueryString = s => searchParamsToObject(new URLSearchParams(s))
-	const create = (fetch, defaultInit = {}) => {
+	const extend = (defaultInit = {}) => {
 		const xfetch = (input, init = {}) => {
 			Object.assign(init, defaultInit)
-			const url = new URL(input, init.baseURI || undefined)
+			const url = new init.URL(input, init.baseURI || undefined)
 			if (!init.headers) {
 				init.headers = {}
 			}
@@ -47,7 +47,7 @@
 			if (!init.credentials) {
 				init.credentials = 'same-origin'
 			}
-			const promise = fetch(url, init).then(res => {
+			const promise = init.fetch(url, init).then(res => {
 				if (!res.ok) throw new HTTPError(res)
 				return res
 			})
@@ -64,13 +64,10 @@
 			}
 		}
 		// Extra methods and classes
-		xfetch.create = create
-		xfetch.extend = defaultInit => create(fetch, defaultInit)
+		xfetch.extend = newDefaultInit => extend(Object.assign({}, defaultInit, newDefaultInit))
 		xfetch.HTTPError = HTTPError
 		return xfetch
 	}
-	const xfetch = create(typeof fetch === 'undefined' ? null : fetch, {
-		baseURI: typeof document === 'undefined' ? undefined : document.baseURI
-	})
-	return xfetch
+	const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined'
+	return isBrowser ? extend({ fetch, URL, Request, baseURI: document.baseURI }) : extend()
 })
