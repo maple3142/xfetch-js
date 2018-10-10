@@ -59,6 +59,7 @@ xf('https://postman-echo.com/get/', { qs: { foo: 'bar' } })
 - Support some simple serialization, including `json`,`urlencoded` and `querystring`
 - Support post transformation like `.json(r => r.body)`
 - Create another instance with default options `xf.extend({})`
+- `fetch(Request)` are not supported
 
 ## API
 

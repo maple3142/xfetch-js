@@ -4,7 +4,7 @@ import { XFetch, XPromise, HTTPError } from '../xfetch.base'
 
 expect<XPromise<Response>>(xf.get(''))
 expect<XPromise<string>>(xf.get('').text())
-expect<XFetch>(xf.extend({ fetch, URL, Request }))
+expect<XFetch>(xf.extend({ fetch, URL, Headers }))
 expect<XFetch>(xf.extend({}))
 expect<XPromise<number>>(xf.get('').json(() => 1))
 // expect<XPromise<Response>>(xf.get('').text(()=>xf.get('')))) // this one should work, but ts doesn't support it in custom Promise
@@ -17,3 +17,4 @@ expect<XPromise<string>>(
 		})
 		.text()
 )
+expect<XPromise<Response>>(xf.get('', { headers: new Headers() }))

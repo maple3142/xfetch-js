@@ -12,12 +12,6 @@ export interface XPromise<T> extends Promise<T> {
 	formData<K>(cb: fn<FormData, K>): XPromise<K>
 	json<K>(cb: fn<any, K>): XPromise<K>
 	text<K>(cb: fn<string, K>): XPromise<K>
-
-	arrayBuffer<K extends XPromise<T>>(cb: fn<ArrayBuffer, K>): K
-	blob<K extends XPromise<T>>(cb: fn<Blob, K>): K
-	formData<K extends XPromise<T>>(cb: fn<FormData, K>): K
-	json<K extends XPromise<T>>(cb: fn<any, K>): K
-	text<K extends XPromise<T>>(cb: fn<string, K>): K
 }
 type originalfetch = GlobalFetch['fetch']
 export interface XRequestInit extends RequestInit {
