@@ -28,8 +28,6 @@
 	}
 	const { assign } = Object
 	const fromEntries = ent => ent.reduce((acc, [k, v]) => ((acc[k] = v), acc), {})
-	const createQueryString = o => new URLSearchParams(o).toString()
-	const parseQueryString = s => fromEntries([...new URLSearchParams(s).entries()])
 	const responseErrorThrower = res => {
 		if (!res.ok) throw new HTTPError(res)
 		return res
@@ -37,6 +35,8 @@
 	const extend = (defaultInit = {}) => {
 		const xfetch = (input, init = {}) => {
 			assign(init, defaultInit)
+			const createQueryString = o => new init.URLSearchParams(o).toString()
+			const parseQueryString = s => fromEntries([...new init.URLSearchParams(s).entries()])
 			const url = new init.URL(input, init.baseURI || undefined)
 			if (!init.headers) {
 				init.headers = {}
@@ -75,5 +75,7 @@
 		return xfetch
 	}
 	const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined'
-	return isBrowser ? extend({ fetch, URL, Request, baseURI: document.baseURI }) : extend()
+	return isBrowser
+		? extend({ fetch: fetch.bind(window), URL, Response, URLSearchParams, baseURI: document.baseURI })
+		: extend()
 })

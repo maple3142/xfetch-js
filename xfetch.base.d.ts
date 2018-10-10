@@ -23,6 +23,7 @@ export interface XRequestInit extends RequestInit {
 	// URL & Request should be constructor
 	URL?: Constructor<URL>
 	Headers?: Constructor<Headers>
+	URLSearchParams?: Constructor<URLSearchParams>
 }
 export declare class HTTPError extends Error {
 	response: Response
