@@ -11,6 +11,8 @@
 		root.xf = fn()
 	}
 })(this, () => {
+	const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head']
+	const ALIASES = ['arrayBuffer', 'blob', 'formData', 'json', 'text']
 	class HTTPError extends Error {
 		constructor(res) {
 			super(res.statusText)
@@ -18,8 +20,13 @@
 			this.response = res
 		}
 	}
-	const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head']
-	const ALIASES = ['arrayBuffer', 'blob', 'formData', 'json', 'text']
+	class XResponsePromise extends Promise {}
+	for (const alias of ALIASES) {
+		// alias for .json() .text() etc...
+		XResponsePromise.prototype[alias] = function(fn) {
+			return this.then(res => res[alias]()).then(fn || (x => x))
+		}
+	}
 	const searchParamsToObject = sp => [...sp.entries()].reduce((o, [k, v]) => ((o[k] = v), o), {})
 	const createQueryString = o => new URLSearchParams(o).toString()
 	const parseQueryString = s => searchParamsToObject(new URLSearchParams(s))
@@ -47,14 +54,12 @@
 			if (!init.credentials) {
 				init.credentials = 'same-origin'
 			}
-			const promise = init.fetch(url, init).then(res => {
-				if (!res.ok) throw new HTTPError(res)
-				return res
-			})
-			for (const alias of ALIASES) {
-				// if transformation function is provided, pass it for transform
-				promise[alias] = fn => promise.then(res => res[alias]()).then(fn || (x => x))
-			}
+			const promise = XResponsePromise.resolve(
+				init.fetch(url, init).then(res => {
+					if (!res.ok) throw new HTTPError(res)
+					return res
+				})
+			)
 			return promise
 		}
 		for (const method of METHODS) {

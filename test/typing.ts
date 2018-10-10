@@ -1,26 +1,19 @@
-declare const expect: <T>(value: T) => void
+declare const expect: <T>(value: T) => void // type assertion helper
 import xf = require('../xfetch')
-import { XFetch, XResponsePromise, HTTPError } from '../xfetch.base'
+import { XFetch, XPromise, HTTPError } from '../xfetch.base'
 
-expect<XResponsePromise>(xf.get(''))
-expect<Promise<string>>(xf.get('').text())
+expect<XPromise<Response>>(xf.get(''))
+expect<XPromise<string>>(xf.get('').text())
 expect<XFetch>(xf.extend({ fetch, URL, Request }))
 expect<XFetch>(xf.extend({}))
-expect<Promise<number>>(xf.get('').json(() => 1))
+expect<XPromise<number>>(xf.get('').json(() => 1))
+// expect<XPromise<Response>>(xf.get('').text(()=>xf.get('')))) // this one should work, but ts doesn't support it in custom Promise
 expect<Promise<HTTPError>>(xf.get('').catch(e => e))
-expect<Promise<string>>(
+expect<XPromise<string>>(
 	xf
 		.get('', {
 			qs: '',
 			json: {}
 		})
 		.text()
-)
-expect<Promise<null>>(
-	xf
-		.get('', {
-			qs: {},
-			form: {}
-		})
-		.blob(() => null)
 )
