@@ -1,4 +1,5 @@
 import test from 'ava'
+import { Headers } from 'node-fetch'
 import xf from '../node'
 
 const client = xf.extend({
@@ -29,12 +30,14 @@ test('merge qs', async t => {
 	const { args } = await client.get('/get?a=b', { qs: { foo: 'bar' } }).json()
 	t.deepEqual(args, { foo: 'bar', a: 'b' })
 })
-test('extend', async t => {
-	const xf2 = xf.extend({
-		baseURI: 'https://postman-echo.com/'
+test('extend: double', async t => {
+	const xc = client.extend({
+		headers: {
+			'x-send-from': 'xfetch-js'
+		}
 	})
-	const { url } = await xf2.get('/get').json()
-	t.is(url, 'https://postman-echo.com/get')
+	const { headers } = await xc.get('/get').json()
+	t.is(headers['x-send-from'], 'xfetch-js')
 })
 test('transforms', async t => {
 	const headers = await client.get('/get').json(r => r.headers)
@@ -47,6 +50,16 @@ test('promise chaining', async t => {
 		.json()
 	console.log(data)
 	t.is(data.host, 'postman-echo.com')
+})
+test('headers', async t => {
+	const { headers } = await client.get('/get', { headers: { 'x-test': 'hello' } }).json()
+	t.is(headers['x-test'], 'hello')
+})
+test('headers: Headers constructor', async t => {
+	const h = new Headers()
+	h.append('x-test', 'hello')
+	const { headers } = await client.get('/get', { headers: h }).json()
+	t.is(headers['x-test'], 'hello')
 })
 test('HTTPError', async t => {
 	await t.throwsAsync(client.get('/404'), {

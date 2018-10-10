@@ -28,7 +28,7 @@ export interface XRequestInit extends RequestInit {
 	fetch?: originalfetch
 	// URL & Request should be constructor
 	URL?: Constructor<URL>
-	Request?: Constructor<Request>
+	Headers?: Constructor<Headers>
 }
 export declare class HTTPError extends Error {
 	response: Response

@@ -12,7 +12,6 @@
 	}
 })(this, () => {
 	const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head']
-	const ALIASES = ['arrayBuffer', 'blob', 'formData', 'json', 'text']
 	class HTTPError extends Error {
 		constructor(res) {
 			super(res.statusText)
@@ -21,21 +20,29 @@
 		}
 	}
 	class XResponsePromise extends Promise {}
-	for (const alias of ALIASES) {
+	for (const alias of ['arrayBuffer', 'blob', 'formData', 'json', 'text']) {
 		// alias for .json() .text() etc...
 		XResponsePromise.prototype[alias] = function(fn) {
 			return this.then(res => res[alias]()).then(fn || (x => x))
 		}
 	}
-	const searchParamsToObject = sp => [...sp.entries()].reduce((o, [k, v]) => ((o[k] = v), o), {})
+	const { assign } = Object
+	const fromEntries = ent => ent.reduce((acc, [k, v]) => ((acc[k] = v), acc), {})
 	const createQueryString = o => new URLSearchParams(o).toString()
-	const parseQueryString = s => searchParamsToObject(new URLSearchParams(s))
+	const parseQueryString = s => fromEntries([...new URLSearchParams(s).entries()])
+	const responseErrorThrower = res => {
+		if (!res.ok) throw new HTTPError(res)
+		return res
+	}
 	const extend = (defaultInit = {}) => {
 		const xfetch = (input, init = {}) => {
-			Object.assign(init, defaultInit)
+			assign(init, defaultInit)
 			const url = new init.URL(input, init.baseURI || undefined)
 			if (!init.headers) {
 				init.headers = {}
+			} else if (init.headers instanceof init.Headers) {
+				// Transform into object if it is object
+				init.headers = fromEntries([...init.headers.entries()])
 			}
 			// Add json or form on body
 			if (init.json) {
@@ -48,19 +55,13 @@
 			// Querystring
 			if (init.qs) {
 				if (typeof init.qs === 'string') init.qs = parseQueryString(init.qs)
-				url.search = createQueryString(Object.assign(searchParamsToObject(url.searchParams), init.qs))
+				url.search = createQueryString(assign(fromEntries([...url.searchParams.entries()]), init.qs))
 			}
 			// same-origin by default
 			if (!init.credentials) {
 				init.credentials = 'same-origin'
 			}
-			const promise = XResponsePromise.resolve(
-				init.fetch(url, init).then(res => {
-					if (!res.ok) throw new HTTPError(res)
-					return res
-				})
-			)
-			return promise
+			return XResponsePromise.resolve(init.fetch(url, init).then(responseErrorThrower))
 		}
 		for (const method of METHODS) {
 			xfetch[method] = (input, init = {}) => {
@@ -69,7 +70,7 @@
 			}
 		}
 		// Extra methods and classes
-		xfetch.extend = newDefaultInit => extend(Object.assign({}, defaultInit, newDefaultInit))
+		xfetch.extend = newDefaultInit => extend(assign({}, defaultInit, newDefaultInit))
 		xfetch.HTTPError = HTTPError
 		return xfetch
 	}
