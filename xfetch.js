@@ -65,7 +65,7 @@
 		}
 		for (const method of METHODS) {
 			xfetch[method] = (input, init = {}) => {
-				init.method = method
+				init.method = method.toUpperCase()
 				return xfetch(input, init)
 			}
 		}
