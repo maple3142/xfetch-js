@@ -76,6 +76,6 @@
 	}
 	const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined'
 	return isBrowser
-		? extend({ fetch: fetch.bind(window), URL, Response, URLSearchParams, baseURI: document.baseURI })
+		? extend({ fetch: fetch.bind(window), URL, Response, URLSearchParams, Headers, baseURI: document.baseURI })
 		: extend()
 })
