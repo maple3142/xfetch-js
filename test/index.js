@@ -1,6 +1,7 @@
 import test from 'ava'
 import { Headers } from 'node-fetch'
 import xf from '../node'
+import FormData from 'form-data'
 
 const client = xf.extend({
 	baseURI: 'https://postman-echo.com/'
@@ -22,8 +23,28 @@ test('post json', async t => {
 	const { data } = await client.post('/post', { json: { foo: 'bar' } }).json()
 	t.deepEqual(data, { foo: 'bar' })
 })
-test('post form', async t => {
-	const { form } = await client.post('/post', { form: { foo: 'bar' } }).json()
+test('post urlencoded:string', async t => {
+	const { form } = await client.post('/post', { urlencoded: 'foo=bar' }).json()
+	t.deepEqual(form, { foo: 'bar' })
+})
+test('post urlencoded:object', async t => {
+	const { form } = await client.post('/post', { urlencoded: { foo: 'bar' } }).json()
+	t.deepEqual(form, { foo: 'bar' })
+})
+test('post formData:object', async t => {
+	const { form } = await client
+		.post('/post', {
+			formData: {
+				foo: 'bar'
+			}
+		})
+		.json()
+	t.deepEqual(form, { foo: 'bar' })
+})
+test('post formData:FormData', async t => {
+	const fd = new FormData()
+	fd.append('foo', 'bar')
+	const { form } = await client.post('/post', { formData: fd }).json()
 	t.deepEqual(form, { foo: 'bar' })
 })
 test('merge qs', async t => {
@@ -48,7 +69,6 @@ test('promise chaining', async t => {
 		.get('/get')
 		.json(({ headers }) => client.post('/post', { json: { host: headers.host } }))
 		.json()
-	console.log(data)
 	t.is(data.host, 'postman-echo.com')
 })
 test('headers', async t => {

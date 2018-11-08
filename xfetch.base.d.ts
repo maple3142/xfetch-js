@@ -17,13 +17,15 @@ type originalfetch = GlobalFetch['fetch']
 export interface XRequestInit extends RequestInit {
 	qs?: object | string
 	json?: any
-	form?: object
+	urlencoded?: string | object
+	formData?: object | FormData
 	baseURI?: string
 	fetch?: originalfetch
 	// URL & Request should be constructor
 	URL?: Constructor<URL>
 	Headers?: Constructor<Headers>
 	URLSearchParams?: Constructor<URLSearchParams>
+	FormData?: Constructor<FormData>
 }
 export declare class HTTPError extends Error {
 	response: Response
