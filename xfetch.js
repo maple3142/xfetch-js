@@ -92,7 +92,7 @@
 	const isBrowser = typeof self !== 'undefined' // works in both window & worker scope
 	return isBrowser
 		? extend({
-				fetch: fetch.bind(window),
+				fetch: fetch.bind(self),
 				URL,
 				Response,
 				URLSearchParams,
