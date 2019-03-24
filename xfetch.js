@@ -89,6 +89,7 @@
 		xfetch.HTTPError = HTTPError
 		return xfetch
 	}
+	const isWindow = typeof document !== 'undefined'
 	const isBrowser = typeof self !== 'undefined' // works in both window & worker scope
 	return isBrowser
 		? extend({
@@ -98,7 +99,7 @@
 				URLSearchParams,
 				Headers,
 				FormData,
-				baseURI: document ? document.baseURI : '' // since there is no document in webworkers
+				baseURI: isWindow ? document.baseURI : '' // since there is no document in webworkers
 		  })
 		: extend()
 })
