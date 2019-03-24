@@ -98,7 +98,7 @@
 				URLSearchParams,
 				Headers,
 				FormData,
-				baseURI: document.baseURI
+				baseURI: document ? document.baseURI : '' // since there is no document in webworkers
 		  })
 		: extend()
 })
