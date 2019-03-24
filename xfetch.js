@@ -89,7 +89,7 @@
 		xfetch.HTTPError = HTTPError
 		return xfetch
 	}
-	const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined'
+	const isBrowser = typeof self !== 'undefined' // works in both window & worker scope
 	return isBrowser
 		? extend({
 				fetch: fetch.bind(window),
