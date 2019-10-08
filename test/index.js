@@ -86,3 +86,20 @@ test('HTTPError', async t => {
 		instanceOf: xf.HTTPError
 	})
 })
+test('support deep object merging', async t => {
+	const client2 = client.extend({
+		headers: {
+			Authorization: 'Bearer asdfghjkl'
+		},
+		qs: {
+			apiVersion: 2
+		}
+	})
+	const r = await client2.get('/get', { headers: { 'Content-Type': 'application/json' }, qs: { q: 'test' } }).json()
+	t.is(r.headers['authorization'], 'Bearer asdfghjkl')
+	t.is(r.headers['content-type'], 'application/json')
+	t.deepEqual(r.args, {
+		apiVersion: '2',
+		q: 'test'
+	})
+})

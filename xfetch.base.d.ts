@@ -13,7 +13,7 @@ export interface XPromise<T> extends Promise<T> {
 	json<K>(cb: fn<any, K>): XPromise<K>
 	text<K>(cb: fn<string, K>): XPromise<K>
 }
-type originalfetch = GlobalFetch['fetch']
+type originalfetch = WindowOrWorkerGlobalScope['fetch']
 export interface XRequestInit extends RequestInit {
 	qs?: object | string
 	json?: any
