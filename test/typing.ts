@@ -1,6 +1,6 @@
 declare const expect: <T>(value: T) => void // type assertion helper
-import xf = require('../xfetch')
-import { XFetch, XPromise, HTTPError } from '../xfetch.base'
+import xf = require('../src/xfetch')
+import { XFetch, XPromise, HTTPError } from '../src/xfetch.base'
 
 expect<XPromise<Response>>(xf.get(''))
 expect<XPromise<string>>(xf.get('').text())

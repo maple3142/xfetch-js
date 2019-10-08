@@ -1,6 +1,6 @@
 import test from 'ava'
 import { Headers } from 'node-fetch'
-import xf from '../node'
+import xf from '../src/node'
 import FormData from 'form-data'
 
 const client = xf.extend({

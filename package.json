@@ -2,14 +2,12 @@
 	"name": "xfetch-js",
 	"version": "0.3.4",
 	"description": "",
-	"main": "node.js",
-	"browser": "xfetch.min.js",
+	"main": "src/node.js",
+	"browser": "dist/xfetch.min.js",
 	"scripts": {
-		"test": "npm run test:js && npm run test:typing",
-		"test:js": "ava",
-		"test:typing": "tsc --strict --outDir .trash test/typing.ts",
-		"min": "minify xfetch.js -o xfetch.min.js",
-		"prepare": "npm run test && npm run min"
+		"test": "ava && tsc --strict --outDir .trash test/typing.ts",
+		"min": "minify src/xfetch.js -o dist/xfetch.min.js",
+		"prepare": "yarn test && yarn min"
 	},
 	"dependencies": {
 		"form-data": "^2.3.3",
