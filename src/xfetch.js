@@ -67,10 +67,7 @@
 			const url = new init.URL(input, init.baseURI || undefined)
 			if (!init.headers) {
 				init.headers = {}
-			} else if (typeis(init.Headers)(init.headers)) {
-				// Transform into object if it is `Headers`
-				init.headers = fromEntries([...init.headers.entries()])
-			}
+			} 
 			// Add json or form on body
 			if (init.json) {
 				init.body = JSON.stringify(init.json)
@@ -88,6 +85,11 @@
 					init.formData = fd
 				}
 				init.body = init.formData
+			}
+			// Insert user-defined headers
+			if (typeis(init.Headers)(init.headers)) {
+				// Transform into object if it is `Headers`
+				init.headers = fromEntries([...init.headers.entries()])
 			}
 			// Querystring
 			if (init.qs) {
