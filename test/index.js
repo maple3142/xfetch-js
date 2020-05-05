@@ -24,11 +24,15 @@ test('post json', async t => {
 	t.deepEqual(data, { foo: 'bar' })
 })
 test('post urlencoded:string', async t => {
-	const { form } = await client.post('/post', { urlencoded: 'foo=bar' }).json()
+	const { form } = await client
+		.post('/post', { urlencoded: 'foo=bar' })
+		.json()
 	t.deepEqual(form, { foo: 'bar' })
 })
 test('post urlencoded:object', async t => {
-	const { form } = await client.post('/post', { urlencoded: { foo: 'bar' } }).json()
+	const { form } = await client
+		.post('/post', { urlencoded: { foo: 'bar' } })
+		.json()
 	t.deepEqual(form, { foo: 'bar' })
 })
 test('post formData:object', async t => {
@@ -67,12 +71,16 @@ test('transforms', async t => {
 test('promise chaining', async t => {
 	const { data } = await client
 		.get('/get')
-		.json(({ headers }) => client.post('/post', { json: { host: headers.host } }))
+		.json(({ headers }) =>
+			client.post('/post', { json: { host: headers.host } })
+		)
 		.json()
 	t.is(data.host, 'postman-echo.com')
 })
 test('headers', async t => {
-	const { headers } = await client.get('/get', { headers: { 'x-test': 'hello' } }).json()
+	const { headers } = await client
+		.get('/get', { headers: { 'x-test': 'hello' } })
+		.json()
 	t.is(headers['x-test'], 'hello')
 })
 test('headers: Headers constructor', async t => {
@@ -80,6 +88,20 @@ test('headers: Headers constructor', async t => {
 	h.append('x-test', 'hello')
 	const { headers } = await client.get('/get', { headers: h }).json()
 	t.is(headers['x-test'], 'hello')
+})
+test('headers: Overwrite prevention (JSON)', async t => {
+	const h = new Headers()
+	h.append('Content-Type', 'application/nosj')
+	const { headers } = await client.get('/get', { headers: h }).json()
+	t.is(headers['content-type'], 'application/nosj')
+})
+test('headers: Overwrite prevention (URL Encoded)', async t => {
+	const h = new Headers()
+	h.append('Content-Type', 'application/lru')
+	const { headers } = await client
+		.post('/post', { headers: h, urlencoded: { foo: 'bar' } })
+		.json()
+	t.is(headers['content-type'], 'application/lru')
 })
 test('HTTPError', async t => {
 	await t.throwsAsync(client.get('/404'), {
@@ -95,7 +117,12 @@ test('support deep object merging', async t => {
 			apiVersion: 2
 		}
 	})
-	const r = await client2.get('/get', { headers: { 'Content-Type': 'application/json' }, qs: { q: 'test' } }).json()
+	const r = await client2
+		.get('/get', {
+			headers: { 'Content-Type': 'application/json' },
+			qs: { q: 'test' }
+		})
+		.json()
 	t.is(r.headers['authorization'], 'Bearer asdfghjkl')
 	t.is(r.headers['content-type'], 'application/json')
 	t.deepEqual(r.args, {
