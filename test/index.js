@@ -1,7 +1,7 @@
-import test from 'ava'
-import { Headers } from 'node-fetch'
-import xf from '../src/node'
-import FormData from 'form-data'
+const test = require('ava')
+const xf = require('../src/node')
+FormData = typeof FormData === 'undefined' ? require('form-data') : FormData
+Headers = typeof Headers === 'undefined' ? require('node-fetch-commonjs').Headers : Headers
 
 const client = xf.extend({
 	baseURI: 'https://postman-echo.com/'
@@ -24,15 +24,11 @@ test('post json', async t => {
 	t.deepEqual(data, { foo: 'bar' })
 })
 test('post urlencoded:string', async t => {
-	const { form } = await client
-		.post('/post', { urlencoded: 'foo=bar' })
-		.json()
+	const { form } = await client.post('/post', { urlencoded: 'foo=bar' }).json()
 	t.deepEqual(form, { foo: 'bar' })
 })
 test('post urlencoded:object', async t => {
-	const { form } = await client
-		.post('/post', { urlencoded: { foo: 'bar' } })
-		.json()
+	const { form } = await client.post('/post', { urlencoded: { foo: 'bar' } }).json()
 	t.deepEqual(form, { foo: 'bar' })
 })
 test('post formData:object', async t => {
@@ -71,16 +67,12 @@ test('transforms', async t => {
 test('promise chaining', async t => {
 	const { data } = await client
 		.get('/get')
-		.json(({ headers }) =>
-			client.post('/post', { json: { host: headers.host } })
-		)
+		.json(({ headers }) => client.post('/post', { json: { host: headers.host } }))
 		.json()
 	t.is(data.host, 'postman-echo.com')
 })
 test('headers', async t => {
-	const { headers } = await client
-		.get('/get', { headers: { 'x-test': 'hello' } })
-		.json()
+	const { headers } = await client.get('/get', { headers: { 'x-test': 'hello' } }).json()
 	t.is(headers['x-test'], 'hello')
 })
 test('headers: Headers constructor', async t => {
@@ -98,9 +90,7 @@ test('headers: Overwrite prevention (JSON)', async t => {
 test('headers: Overwrite prevention (URL Encoded)', async t => {
 	const h = new Headers()
 	h.append('Content-Type', 'application/lru')
-	const { headers } = await client
-		.post('/post', { headers: h, urlencoded: { foo: 'bar' } })
-		.json()
+	const { headers } = await client.post('/post', { headers: h, urlencoded: { foo: 'bar' } }).json()
 	t.is(headers['content-type'], 'application/lru')
 })
 test('HTTPError', async t => {
